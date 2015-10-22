@@ -10,28 +10,55 @@ namespace Calculator
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Calculator REPL. Please input simple two-component arithmetic expressions (i.e. 2 + 4)");
             Loop(Print);
         }
 
         static void Loop(Action<string> loopAction)
         {
+            bool forceDone = false;
             do
             {
-                loopAction.Invoke(Eval());
-            } while (true);
+                while (!Console.KeyAvailable || forceDone)
+                {
+                    try
+                    {
+                        loopAction.Invoke(Eval(Read()));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        forceDone = true;
+                    }
+                }
+            } while (Console.ReadKey(true).Key != ConsoleKey.Escape || forceDone);
         }
-
+        
         static void Print(string output)
         {
-            Console.WriteLine(output);
+            try
+            {
+                Console.WriteLine(output);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        static string Eval()
+        static string Eval(string input)
         {
-            return (Convert.ToInt32(Read()) + Convert.ToInt32(Read())).ToString();
+            try
+            {
+                return input;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public static string Read()
+        static string Read()
         {
             Console.Write(">>> ");
             return Console.ReadLine();
