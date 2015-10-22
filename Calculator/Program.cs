@@ -10,7 +10,8 @@ namespace Calculator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Convert.ToInt32(args[0]) + Convert.ToInt32(args[1]));
+            Console.WriteLine(Calculator.Create(args[0] + " + " + args[1]).Evaluate());
+            Console.ReadLine();
         }
     }
 }
