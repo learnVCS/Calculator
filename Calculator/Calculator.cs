@@ -68,8 +68,8 @@ namespace Calculator
         ///     static void Main(string[] args)
         ///     {
         ///         Console.WriteLine(Calculator.Create("18 - 3").Evaluate());
-        ///         Console.WriteLine(Calculator.Create("95*17").Evaluate());
-        ///         Console.WriteLine(Calculator.Create("40 +40").Evaluate());
+        ///         Console.WriteLine(Calculator.Create("95*-17").Evaluate());
+        ///         Console.WriteLine(Calculator.Create("-40 +40").Evaluate());
         ///     }
         /// }
         /// </code>
@@ -79,7 +79,7 @@ namespace Calculator
         {
             var expression = input.ToCharArray();
             int? num1 = null, num2 = null;
-            char op = default(char);
+            char op = default(char), last = default(char);
             foreach (var element in expression)
             {
                 int temp;
@@ -89,8 +89,15 @@ namespace Calculator
                     {
                         if (num1.HasValue)
                         {
-                            num1 *= 10;
-                            num1 += temp;
+                            if (num1 == -1)
+                            {
+                                num1 *= temp;
+                            }
+                            else
+                            {
+                                num1 *= 10;
+                                num1 += temp;
+                            }
                         }
                         else
                         {
@@ -101,8 +108,15 @@ namespace Calculator
                     {
                         if (num2.HasValue)
                         {
-                            num2 *= 10;
-                            num2 += temp;
+                            if (num2 == -1 && last == '-')
+                            {
+                                num2 *= temp;
+                            }
+                            else
+                            {
+                                num2 *= 10;
+                                num2 += temp;
+                            }
                         }
                         else
                         {
@@ -112,8 +126,20 @@ namespace Calculator
                 }
                 else if ("+-*/".IndexOf(element) != -1)
                 {
-                    op = element;
+                    if (element == '-' && !num1.HasValue)
+                    {
+                        num1 = -1;
+                    }
+                    else if (element == '-' && op != default(char) && !num2.HasValue)
+                    {
+                        num2 = -1;
+                    }
+                    else
+                    {
+                        op = element;
+                    }
                 }
+                last = element;
             }
             return new Calculator(num1.Value, num2.Value) { Operator = op };
         }
