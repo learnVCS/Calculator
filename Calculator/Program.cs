@@ -10,7 +10,31 @@ namespace Calculator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Convert.ToInt32(args[0]) + Convert.ToInt32(args[1]));
+            Loop(Print);
+        }
+
+        static void Loop(Action<string> loopAction)
+        {
+            do
+            {
+                loopAction.Invoke(Eval());
+            } while (true);
+        }
+
+        static void Print(string output)
+        {
+            Console.WriteLine(output);
+        }
+
+        static string Eval()
+        {
+            return (Convert.ToInt32(Read()) + Convert.ToInt32(Read())).ToString();
+        }
+
+        public static string Read()
+        {
+            Console.Write(">>> ");
+            return Console.ReadLine();
         }
     }
 }
