@@ -14,6 +14,12 @@ namespace Calculator
             Loop(Print);
         }
 
+        /// <summary>
+        /// Loops the action until an error or the Escape key is pressed.
+        /// The Escape key is often blocked due to Console.ReadLine, so 
+        /// also keep Ctrl-C in mind.
+        /// </summary>
+        /// <param name="loopAction"></param>
         static void Loop(Action<string> loopAction)
         {
             bool forceDone = false;
@@ -34,6 +40,10 @@ namespace Calculator
             } while (Console.ReadKey(true).Key != ConsoleKey.Escape || forceDone);
         }
         
+        /// <summary>
+        /// Prints the output it's given in a new line
+        /// </summary>
+        /// <param name="output"></param>
         static void Print(string output)
         {
             try
@@ -46,11 +56,19 @@ namespace Calculator
             }
         }
 
+        /// <summary>
+        /// Evaluates a string expression to an integer result using <see cref="Calculator"/>
+        /// </summary>
+        /// <param name="input">String expression to be evaluated. 
+        /// Follows rules outlined in <see cref="Calculator.Create"/></param>
+        /// <returns>Evaluated result of expression as a string</returns>
         static string Eval(string input)
         {
+            Calculator calc;
             try
             {
-                return input;
+                calc = Calculator.Create(input);
+                return calc.Evaluate().ToString();
             }
             catch
             {
@@ -58,6 +76,10 @@ namespace Calculator
             }
         }
 
+        /// <summary>
+        /// Reads in an expression (i.e. "2 + 2") from the console
+        /// </summary>
+        /// <returns>The console input</returns>
         static string Read()
         {
             Console.Write(">>> ");
